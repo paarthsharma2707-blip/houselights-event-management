@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Houselights — Plan, promote, and run your event</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root{
+    --ink:        #14120F;
+    --ink-soft:   #211D17;
+    --ink-softer: #2C271E;
+    --paper:      #F3EEE1;
+    --paper-dim:  #C9C2B0;
+    --gold:       #E8B34A;
+    --gold-dim:   #B98B33;
+    --curtain:    #A0453F;
+    --backstage:  #3E6259;
+    --line:       rgba(243,238,225,0.16);
+
+    --display: 'Anton', 'Arial Narrow', sans-serif;
+    --body: 'Bricolage Grotesque', 'Georgia', serif;
+    --mono: 'Space Mono', 'Courier New', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  button{font-family:inherit; cursor:pointer;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 8px 2px rgba(232,179,74,0.6);
+  }
+
+  h1,h2,h3{
+    font-family:var(--display);
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    font-weight:400;
+    line-height:0.98;
+  }
+
+  /* ---------- MARQUEE BULB BORDER ---------- */
+  .bulb-row{
+    display:flex;
+    gap:18px;
+    padding:10px 0;
+    overflow:hidden;
+    justify-content:center;
+  }
+  .bulb-row span{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 6px 1px rgba(232,179,74,0.55);
+    flex:none;
+    animation:flicker 3.2s infinite ease-in-out;
+  }
+  .bulb-row span:nth-child(odd){animation-delay:0.4s;}
+  .bulb-row span:nth-child(3n){animation-delay:0.9s;}
+  @keyframes flicker{
+    0%,100%{opacity:1;}
+    45%{opacity:0.35;}
+    50%{opacity:1;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .bulb-row span{animation:none;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(20,18,15,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 28px;
+    max-width:1180px; margin:0 auto;
+  }
+  .brand{
+    font-family:var(--display);
+    font-size:1.5rem;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand-dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 10px 2px rgba(232,179,74,0.7);
+  }
+  .nav-links{
+    display:flex; gap:36px; align-items:center;
+    font-size:0.95rem;
+  }
+  .nav-links a{
+    color:var(--paper-dim);
+    transition:color 0.2s;
+    position:relative;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{color:var(--paper);}
+  .nav-cta{
+    background:var(--gold);
+    color:var(--ink) !important;
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:0.82rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:11px 20px;
+    border-radius:2px;
+    transition:transform 0.15s, background 0.2s;
+  }
+  .nav-cta:hover{background:#f2c46b; transform:translateY(-1px);}
+  .menu-toggle{
+    display:none;
+    background:none; border:1px solid var(--line); color:var(--paper);
+    padding:8px 12px; border-radius:2px; font-family:var(--mono);
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 70px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:60px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(3rem, 6.4vw, 5.6rem);
+    margin:18px 0 26px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--gold);
+  }
+  .hero p.lede{
+    font-size:1.18rem;
+    color:var(--paper-dim);
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--gold);
+    color:var(--ink);
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:0.88rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:16px 26px;
+    border:none;
+    border-radius:2px;
+    transition:transform 0.15s, background 0.2s;
+  }
+  .btn-primary:hover{background:#f2c46b; transform:translateY(-2px);}
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--paper);
+    font-family:var(--mono);
+    font-size:0.88rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:16px 26px;
+    border-radius:2px;
+    transition:border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover{border-color:var(--gold); background:rgba(232,179,74,0.06);}
+
+  /* signature: ticket stub */
+  .ticket{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:6px;
+    position:relative;
+    padding:26px 26px 22px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.55);
+    transform:rotate(-2.5deg);
+  }
+  .ticket::before, .ticket::after{
+    content:"";
+    position:absolute;
+    width:26px; height:26px;
+    background:var(--ink);
+    border-radius:50%;
+    top:50%; transform:translateY(-50%);
+  }
+  .ticket::before{left:-13px;}
+  .ticket::after{right:-13px;}
+  .ticket-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding-bottom:16px;
+    border-bottom:2px dashed rgba(20,18,15,0.28);
+    margin-bottom:16px;
+  }
+  .ticket-top .tt-label{
+    font-family:var(--mono); font-size:0.68rem; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--curtain); font-weight:700;
+  }
+  .ticket-top h3{
+    font-size:1.5rem; margin-top:4px; color:var(--ink);
+  }
+  .ticket-meta{
+    display:flex; justify-content:space-between;
+    font-family:var(--mono); font-size:0.74rem; color:#5a5346;
+  }
+  .ticket-meta strong{color:var(--ink); display:block; font-size:0.95rem; margin-bottom:2px;}
+  .admit-one{
+    position:absolute; top:44%; right:-2px;
+    transform:translateY(-50%) rotate(90deg);
+    transform-origin:right center;
+    font-family:var(--mono); font-size:0.62rem; letter-spacing:0.2em;
+    color:rgba(20,18,15,0.35); text-transform:uppercase;
+    white-space:nowrap;
+  }
+
+  /* ---------- SECTION SHELLS ---------- */
+  section{padding:110px 0;}
+  .section-head{
+    max-width:640px;
+    margin-bottom:64px;
+  }
+  .section-head h2{
+    font-size:clamp(2.1rem, 4vw, 3.2rem);
+    margin-top:14px;
+  }
+  .section-head p{
+    color:var(--paper-dim);
+    font-size:1.08rem;
+    margin-top:18px;
+    max-width:52ch;
+  }
+
+  /* ---------- FEATURES (ticket stubs x3) ---------- */
+  .feature-row{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:56px 34px;
+  }
+  .fticket{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:8px;
+    padding:0;
+    position:relative;
+    box-shadow:0 24px 50px -24px rgba(0,0,0,0.5);
+    transition:transform 0.25s ease;
+  }
+  .fticket:hover{transform:translateY(-8px);}
+  .fticket::before,.fticket::after{
+    content:"";
+    position:absolute;
+    width:22px;height:22px;
+    background:var(--ink);
+    border-radius:50%;
+    left:50%; transform:translateX(-50%);
+  }
+  .fticket::before{top:-11px;}
+  .fticket::after{bottom:-11px;}
+  .fticket-body{padding:34px 28px 30px;}
+  .fticket-num{
+    font-family:var(--mono); font-size:0.72rem; font-weight:700;
+    letter-spacing:0.14em; text-transform:uppercase;
+    padding-bottom:16px; margin-bottom:18px;
+    border-bottom:2px dashed rgba(20,18,15,0.25);
+    display:flex; justify-content:space-between;
+  }
+  .fticket-num .fn-tag{color:var(--curtain);}
+  .fticket-num .fn-id{color:#8a8171;}
+  .fticket h3{font-size:1.55rem; color:var(--ink); margin-bottom:12px; letter-spacing:0;}
+  .fticket p{color:#4a4438; font-size:0.98rem;}
+  .fticket-footer{
+    font-family:var(--mono); font-size:0.68rem;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:#8a8171; margin-top:22px; padding-top:16px;
+    border-top:1px solid rgba(20,18,15,0.15);
+  }
+
+  /* ---------- RUN OF SHOW (timeline) ---------- */
+  .timeline{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    margin-top:30px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    top:17px; left:0; right:0;
+    height:2px;
+    background:repeating-linear-gradient(90deg, var(--line) 0 10px, transparent 10px 20px);
+  }
+  .tl-step{
+    position:relative;
+    padding:0 24px 0 0;
+  }
+  .tl-dot{
+    width:36px; height:36px;
+    border-radius:50%;
+    background:var(--ink-soft);
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:700; font-size:0.85rem;
+    color:var(--gold);
+    margin-bottom:24px;
+    position:relative; z-index:2;
+  }
+  .tl-step h3{
+    font-size:1.2rem; color:var(--paper); margin-bottom:10px; letter-spacing:0.01em;
+  }
+  .tl-step p{color:var(--paper-dim); font-size:0.92rem; max-width:26ch;}
+  .tl-time{
+    font-family:var(--mono); font-size:0.7rem; color:var(--gold-dim);
+    letter-spacing:0.1em; margin-bottom:8px; display:block;
+  }
+
+  /* ---------- MARQUEE QUOTE ---------- */
+  .marquee-quote{
+    background:var(--ink-soft);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:90px 0;
+    text-align:center;
+    position:relative;
+  }
+  .marquee-quote blockquote{
+    font-family:var(--display);
+    text-transform:uppercase;
+    font-size:clamp(1.7rem, 3.6vw, 3rem);
+    line-height:1.18;
+    max-width:920px;
+    margin:0 auto;
+    color:var(--paper);
+    text-shadow:0 0 22px rgba(232,179,74,0.18);
+  }
+  .marquee-quote blockquote span{color:var(--gold);}
+  .marquee-quote cite{
+    display:block; margin-top:26px;
+    font-family:var(--mono); font-style:normal;
+    font-size:0.82rem; color:var(--paper-dim); letter-spacing:0.05em;
+  }
+
+  /* ---------- PRICING (tickets) ---------- */
+  .pricing-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:34px;
+    align-items:stretch;
+  }
+  .price-ticket{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:8px;
+    position:relative;
+    display:flex; flex-direction:column;
+    box-shadow:0 24px 50px -24px rgba(0,0,0,0.5);
+  }
+  .price-ticket.featured{
+    outline:2px solid var(--gold);
+    transform:scale(1.035);
+  }
+  .price-ticket::before,.price-ticket::after{
+    content:"";
+    position:absolute;
+    width:22px;height:22px;
+    background:var(--ink);
+    border-radius:50%;
+    left:50%; transform:translateX(-50%);
+  }
+  .price-ticket::before{top:-11px;}
+  .price-ticket::after{bottom:-11px;}
+  .pt-head{
+    padding:30px 28px 22px;
+    border-bottom:2px dashed rgba(20,18,15,0.25);
+  }
+  .pt-tag{
+    font-family:var(--mono); font-size:0.7rem; font-weight:700;
+    letter-spacing:0.16em; text-transform:uppercase; color:var(--curtain);
+  }
+  .pt-head h3{font-size:1.6rem; margin:8px 0 14px; color:var(--ink);}
+  .pt-price{font-family:var(--mono); font-size:2.1rem; font-weight:700;}
+  .pt-price span{font-size:0.95rem; font-weight:400; color:#6a6255;}
+  .pt-body{padding:24px 28px 30px; flex:1; display:flex; flex-direction:column;}
+  .pt-list{margin-bottom:26px; flex:1;}
+  .pt-list li{
+    font-size:0.92rem; color:#3a352b; padding:7px 0;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .pt-list li::before{content:"—"; color:var(--curtain); flex:none;}
+  .pt-btn{
+    display:block; text-align:center;
+    font-family:var(--mono); font-size:0.82rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.04em;
+    padding:14px; border-radius:3px;
+    background:var(--ink); color:var(--paper);
+    transition:background 0.2s;
+  }
+  .pt-btn:hover{background:#000;}
+  .price-ticket.featured .pt-btn{background:var(--curtain);}
+  .price-ticket.featured .pt-btn:hover{background:#8a3835;}
+
+  /* ---------- CTA FOOTER ---------- */
+  .cta-final{
+    text-align:center;
+    padding:120px 0 90px;
+  }
+  .cta-final h2{
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    max-width:820px; margin:0 auto 22px;
+  }
+  .cta-final p{
+    color:var(--paper-dim); font-size:1.08rem; margin-bottom:38px;
+  }
+  .signup-row{
+    display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
+  }
+  .signup-row input{
+    background:var(--ink-soft);
+    border:1px solid var(--line);
+    color:var(--paper);
+    font-family:var(--body);
+    padding:16px 18px;
+    border-radius:3px;
+    width:320px;
+    max-width:70vw;
+    font-size:0.95rem;
+  }
+  .signup-row input::placeholder{color:var(--paper-dim);}
+  .signup-row input:focus, a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold); outline-offset:2px;
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:44px 0;
+  }
+  .foot-row{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+  }
+  .foot-links{display:flex; gap:28px; font-size:0.86rem; color:var(--paper-dim);}
+  .foot-links a:hover{color:var(--paper);}
+  .foot-copy{font-family:var(--mono); font-size:0.76rem; color:var(--paper-dim);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:940px){
+    .hero-grid{grid-template-columns:1fr; gap:64px;}
+    .hero-visual{order:-1; max-width:340px; margin:0 auto;}
+    .feature-row{grid-template-columns:1fr;}
+    .timeline{grid-template-columns:1fr 1fr; row-gap:44px;}
+    .timeline::before{display:none;}
+    .pricing-row{grid-template-columns:1fr; max-width:420px; margin:0 auto;}
+    .price-ticket.featured{transform:none;}
+  }
+  @media (max-width:700px){
+    .nav-links{
+      position:fixed; inset:72px 0 0 0;
+      background:var(--ink);
+      flex-direction:column; align-items:flex-start;
+      padding:34px 28px; gap:26px;
+      transform:translateX(100%);
+      transition:transform 0.25s ease;
+      border-top:1px solid var(--line);
+    }
+    .nav-links.open{transform:translateX(0);}
+    .menu-toggle{display:block;}
+    .timeline{grid-template-columns:1fr;}
+    section{padding:74px 0;}
+    .hero{padding:56px 0 40px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#top" class="brand"><span class="brand-dot"></span>Houselights</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">Run of show</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#" class="nav-cta">Start your show</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">MENU</button>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">For people who run the room</p>
+        <h1>Sell out<br>the <em>house.</em></h1>
+        <p class="lede">Houselights is where organizers book the room, print the tickets, and paper the house — before doors, during doors, and after the encore. One place, not six tabs.</p>
+        <div class="hero-ctas">
+          <a href="#pricing" class="btn-primary">Start your show</a>
+          <a href="#how" class="btn-ghost">See the run of show</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="ticket">
+          <div class="admit-one">Admit One · No Refunds · Houselights</div>
+          <div class="ticket-top">
+            <div>
+              <span class="tt-label">Now booking</span>
+              <h3>Autumn Supper Series</h3>
+            </div>
+          </div>
+          <div class="ticket-meta">
+            <div>
+              <strong>Sat, Oct 17</strong>
+              Doors 7:00 PM
+            </div>
+            <div>
+              <strong>212 / 240</strong>
+              Sold
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bulb-row" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">What's on the call sheet</p>
+        <h2>Three jobs. One stage.</h2>
+        <p>Every event has the same three jobs, whether it's a backyard fundraiser or a 2,000-seat gala. Houselights gives each one its own room, and keeps them talking to each other.</p>
+      </div>
+      <div class="feature-row">
+        <div class="fticket">
+          <div class="fticket-body">
+            <div class="fticket-num"><span class="fn-tag">Plan</span><span class="fn-id">№ 01</span></div>
+            <h3>Book the room</h3>
+            <p>Hold your venue, build the run-of-show minute by minute, assign your crew, and track the budget against every line item — from deposit to teardown.</p>
+            <div class="fticket-footer">Venue holds · Staffing · Budget lines</div>
+          </div>
+        </div>
+        <div class="fticket">
+          <div class="fticket-body">
+            <div class="fticket-num"><span class="fn-tag">Promote</span><span class="fn-id">№ 02</span></div>
+            <h3>Paper the house</h3>
+            <p>Stand up an event page in minutes, push it to email and social on schedule, and hand out presale codes without a spreadsheet full of promo links.</p>
+            <div class="fticket-footer">Event pages · Presale codes · Email &amp; social</div>
+          </div>
+        </div>
+        <div class="fticket">
+          <div class="fticket-body">
+            <div class="fticket-num"><span class="fn-tag">Manage</span><span class="fn-id">№ 03</span></div>
+            <h3>Take the door</h3>
+            <p>Scan tickets at check-in, watch capacity update live, handle the walk-up line, and close out the night with numbers ready for the next show.</p>
+            <div class="fticket-footer">Check-in scanning · Live capacity · Close-out report</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RUN OF SHOW -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How a show comes together</p>
+        <h2>Run of show</h2>
+        <p>Every event on Houselights moves through the same four beats — the same ones you'd write on a call sheet, just with the busywork handled for you.</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-step">
+          <div class="tl-dot">01</div>
+          <span class="tl-time">Weeks before</span>
+          <h3>Load-in</h3>
+          <p>Set the date, lock the venue, and invite the crew who'll actually run the night.</p>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">02</div>
+          <span class="tl-time">Days before</span>
+          <h3>Soundcheck</h3>
+          <p>Build the event page, set your pricing tiers, and send a test ticket through the whole flow.</p>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">03</div>
+          <span class="tl-time">On sale</span>
+          <h3>Doors</h3>
+          <p>Promote the show, sell tickets, and watch RSVPs and waitlists move in real time.</p>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">04</div>
+          <span class="tl-time">After the show</span>
+          <h3>Encore</h3>
+          <p>Check guests in, close out the till, and pull a report you can hand straight to the next one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE QUOTE -->
+  <section class="marquee-quote">
+    <div class="wrap">
+      <blockquote>“We stopped running the box office out of a shared spreadsheet. <span>Doors have never gone this smoothly.</span>”</blockquote>
+      <cite>— Marisol Ochoa, Producer, The Corner Room Supper Club</cite>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Get in the door</p>
+        <h2>Pick your seat.</h2>
+        <p>Priced like the shows you run — start small, upgrade when the house gets bigger.</p>
+      </div>
+      <div class="pricing-row">
+        <div class="price-ticket">
+          <div class="pt-head">
+            <span class="pt-tag">General Admission</span>
+            <h3>Solo Organizer</h3>
+            <div class="pt-price">$0<span> / month</span></div>
+          </div>
+          <div class="pt-body">
+            <ul class="pt-list">
+              <li>1 active event at a time</li>
+              <li>Up to 100 tickets per event</li>
+              <li>Basic event page &amp; RSVP form</li>
+              <li>Email confirmations</li>
+            </ul>
+            <a href="#" class="pt-btn">Get your first ticket</a>
+          </div>
+        </div>
+        <div class="price-ticket featured">
+          <div class="pt-head">
+            <span class="pt-tag">Reserved</span>
+            <h3>Running Crew</h3>
+            <div class="pt-price">$39<span> / month</span></div>
+          </div>
+          <div class="pt-body">
+            <ul class="pt-list">
+              <li>Unlimited events</li>
+              <li>Up to 2,000 tickets per event</li>
+              <li>Presale codes &amp; waitlists</li>
+              <li>Check-in scanning app</li>
+              <li>Team roles &amp; permissions</li>
+            </ul>
+            <a href="#" class="pt-btn">Book the room</a>
+          </div>
+        </div>
+        <div class="price-ticket">
+          <div class="pt-head">
+            <span class="pt-tag">Backstage</span>
+            <h3>Venue &amp; Agency</h3>
+            <div class="pt-price">Let's talk</div>
+          </div>
+          <div class="pt-body">
+            <ul class="pt-list">
+              <li>Unlimited events &amp; tickets</li>
+              <li>Multi-venue calendar</li>
+              <li>Custom branding on event pages</li>
+              <li>Priority support, day-of</li>
+            </ul>
+            <a href="#" class="pt-btn">Talk to the box office</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta-final">
+    <div class="wrap">
+      <p class="eyebrow" style="justify-content:center;">Doors open when you're ready</p>
+      <h2>Your next show<br>starts here.</h2>
+      <p>No card required to hold your first date.</p>
+      <form class="signup-row" onsubmit="event.preventDefault(); const b=this.querySelector('button'); b.textContent='Ticket sent →'; b.style.background='#f2c46b';">
+        <input type="email" placeholder="you@yourvenue.com" required aria-label="Email address">
+        <button type="submit" class="btn-primary">Start your show</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <a href="#top" class="brand" style="font-size:1.1rem;"><span class="brand-dot"></span>Houselights</a>
+    <div class="foot-links">
+      <a href="#features">Features</a>
+      <a href="#how">Run of show</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="foot-copy">© 2026 HOUSELIGHTS — DOORS AT 7</div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const isOpen = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+    toggle.textContent = isOpen ? 'CLOSE' : 'MENU';
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'MENU';
+  }));
+</script>
+
+</body>
+</html>
